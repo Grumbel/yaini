@@ -25,6 +25,7 @@ list(APPEND CMAKE_MODULE_PATH ${TINYCMMC_MODULE_PATH})
 include(GNUInstallDirs)
 include(MaximumWarnings)
 include(ClangTidy)
+include(GetProjectVersion)
 
 # Build dependencies
 function(build_dependencies)

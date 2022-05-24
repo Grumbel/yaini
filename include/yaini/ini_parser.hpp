@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_XBOXDRV_INI_PARSER_HPP
-#define HEADER_XBOXDRV_INI_PARSER_HPP
+#ifndef HEADER_YAINI_INI_PARSER_HPP
+#define HEADER_YAINI_INI_PARSER_HPP
 
 #include <sstream>
 

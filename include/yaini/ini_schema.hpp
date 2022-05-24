@@ -20,7 +20,7 @@
 #include <functional>
 #include <map>
 #include <string>
-
+
 class INIPairSchema
 {
 public:
@@ -63,7 +63,7 @@ private:
   INISchemaSection(const INISchemaSection&);
   INISchemaSection& operator=(const INISchemaSection&);
 };
-
+
 class INISchema
 {
 private:
@@ -88,7 +88,7 @@ private:
   INISchema(const INISchema&);
   INISchema& operator=(const INISchema&);
 };
-
+
 #endif
 
 /* EOF */

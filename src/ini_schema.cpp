@@ -17,7 +17,7 @@
 #include "ini_schema.hpp"
 
 #include <sstream>
-
+
 class INIPairSchemaBoolCallback : public INIPairSchema
 {
 private:
@@ -63,7 +63,7 @@ public:
     return "<not implemented>";
   }
 };
-
+
 class INIPairSchemaBool : public INIPairSchema
 {
 private:
@@ -103,7 +103,7 @@ private:
   INIPairSchemaBool(const INIPairSchemaBool&);
   INIPairSchemaBool& operator=(const INIPairSchemaBool&);
 };
-
+
 class INIPairSchemaInt : public INIPairSchema
 {
 private:
@@ -127,7 +127,7 @@ private:
   INIPairSchemaInt(const INIPairSchemaInt&);
   INIPairSchemaInt& operator=(const INIPairSchemaInt&);
 };
-
+
 class INIPairSchemaFloat : public INIPairSchema
 {
 private:
@@ -151,7 +151,7 @@ private:
   INIPairSchemaFloat(const INIPairSchemaFloat&);
   INIPairSchemaFloat& operator=(const INIPairSchemaFloat&);
 };
-
+
 class INIPairSchemaString : public INIPairSchema
 {
 private:
@@ -174,7 +174,7 @@ private:
   INIPairSchemaString(const INIPairSchemaString&);
   INIPairSchemaString& operator=(const INIPairSchemaString&);
 };
-
+
 class INIPairSchemaCallback : public INIPairSchema
 {
 private:
@@ -197,7 +197,7 @@ public:
     return "<not implemented>";
   }
 };
-
+
 INISchemaSection::INISchemaSection(std::function<void (const std::string&, const std::string&)> callback) :
   m_schema(),
   m_callback(callback)
@@ -293,7 +293,7 @@ INISchemaSection::save(std::ostream& out)
     out << i->first << " = " << i->second->str() << std::endl;
   }
 }
-
+
 INISchema::INISchema() :
   m_sections()
 {

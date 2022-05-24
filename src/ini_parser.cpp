@@ -20,6 +20,8 @@
 
 #include "ini_builder.hpp"
 
+namespace yaini {
+
 INIParser::INIParser(std::istream& in, INIBuilder& builder, const std::string& context) :
   m_in(in),
   m_builder(builder),
@@ -348,5 +350,7 @@ INIParser::getchar()
 {
   return m_in.get();
 }
+
+} // namespace yaini
 
 /* EOF */

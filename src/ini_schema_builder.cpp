@@ -20,6 +20,8 @@
 
 #include "ini_schema.hpp"
 
+namespace yaini {
+
 INISchemaBuilder::INISchemaBuilder(const INISchema& schema) :
   m_schema(schema),
   m_current_section()
@@ -60,5 +62,7 @@ INISchemaBuilder::send_pair(const std::string& name, const std::string& value)
     }
   }
 }
+
+} // namespace yaini
 
 /* EOF */

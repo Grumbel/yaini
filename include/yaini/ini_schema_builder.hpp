@@ -19,6 +19,8 @@
 
 #include "ini_builder.hpp"
 
+namespace yaini {
+
 class INISchema;
 
 class INISchemaBuilder : public INIBuilder
@@ -37,6 +39,8 @@ private:
   INISchemaBuilder(const INISchemaBuilder&);
   INISchemaBuilder& operator=(const INISchemaBuilder&);
 };
+
+} // namespace yaini
 
 #endif
 

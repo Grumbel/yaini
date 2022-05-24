@@ -22,6 +22,8 @@
 #include <memory>
 #include <string>
 
+namespace yaini {
+
 class INIPairSchema
 {
 public:
@@ -87,6 +89,8 @@ private:
   INISchema(const INISchema&);
   INISchema& operator=(const INISchema&);
 };
+
+} // namespace yaini
 
 #endif
 

@@ -5,7 +5,7 @@
 #include <yaini/ini_parser.hpp>
 #include <yaini/ini_builder.hpp>
 
-class INIParserTestBuilder : public INIBuilder
+class INIParserTestBuilder : public yaini::INIBuilder
 {
 private:
   std::ostream& m_out;
@@ -58,7 +58,7 @@ TEST(INIParserTest, parse)
   std::istringstream in(input);
   std::ostringstream out;
   INIParserTestBuilder builder(out);
-  INIParser parser(in, builder, "<from-string>");
+  yaini::INIParser parser(in, builder, "<from-string>");
   parser.run();
 
   ASSERT_EQ(expected, out.str());

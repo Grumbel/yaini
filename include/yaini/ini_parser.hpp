@@ -19,6 +19,8 @@
 
 #include <sstream>
 
+namespace yaini {
+
 class INIBuilder;
 
 class INIParser
@@ -57,6 +59,8 @@ private:
   INIParser(const INIParser&);
   INIParser& operator=(const INIParser&);
 };
+
+} // namespace yaini
 
 #endif
 

@@ -18,6 +18,8 @@
 
 #include <sstream>
 
+namespace yaini {
+
 class INIPairSchemaBoolCallback : public INIPairSchema
 {
 private:
@@ -335,5 +337,7 @@ INISchema::save(std::ostream& out)
   }
   out << "\n# EOF #" << std::endl;
 }
+
+} // namespace yaini
 
 /* EOF */

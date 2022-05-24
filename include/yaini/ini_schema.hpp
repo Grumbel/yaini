@@ -67,8 +67,7 @@ private:
 class INISchema
 {
 private:
-  typedef std::map<std::string, INISchemaSection*> Sections;
-  Sections m_sections;
+  std::map<std::string, INISchemaSection*> m_sections;
 
 public:
   INISchema();

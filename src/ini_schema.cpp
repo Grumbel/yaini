@@ -206,7 +206,7 @@ INISchemaSection::INISchemaSection(std::function<void (const std::string&, const
 
 INISchemaSection::~INISchemaSection()
 {
-  for(Schema::iterator i = m_schema.begin(); i != m_schema.end(); ++i)
+  for (auto i = m_schema.begin(); i != m_schema.end(); ++i)
   {
     delete i->second;
   }
@@ -215,7 +215,7 @@ INISchemaSection::~INISchemaSection()
 INISchemaSection&
 INISchemaSection::add(const std::string& name, INIPairSchema* schema)
 {
-  Schema::iterator i = m_schema.find(name);
+  auto i = m_schema.find(name);
 
   if (i != m_schema.end())
   {
@@ -274,7 +274,7 @@ INISchemaSection::operator()(const std::string& name, std::function<void (const 
 INIPairSchema*
 INISchemaSection::get(const std::string& name) const
 {
-  Schema::const_iterator i = m_schema.find(name);
+  auto i = m_schema.find(name);
   if (i == m_schema.end())
   {
     return nullptr;
@@ -288,7 +288,7 @@ INISchemaSection::get(const std::string& name) const
 void
 INISchemaSection::save(std::ostream& out)
 {
-  for(Schema::iterator i = m_schema.begin(); i != m_schema.end(); ++i)
+  for (auto i = m_schema.begin(); i != m_schema.end(); ++i)
   {
     out << i->first << " = " << i->second->str() << std::endl;
   }
@@ -307,7 +307,7 @@ INISchema::~INISchema()
 void
 INISchema::clear()
 {
-  for(Sections::iterator i = m_sections.begin(); i != m_sections.end(); ++i)
+  for (auto i = m_sections.begin(); i != m_sections.end(); ++i)
   {
     delete i->second;
   }
@@ -318,7 +318,7 @@ INISchemaSection&
 INISchema::section(const std::string& name,
                    std::function<void (const std::string&, const std::string&)> callback)
 {
-  Sections::iterator i = m_sections.find(name);
+  auto const i = m_sections.find(name);
   if (i != m_sections.end())
   {
     delete i->second;
@@ -332,7 +332,7 @@ INISchema::section(const std::string& name,
 INISchemaSection*
 INISchema::get_section(const std::string& name) const
 {
-  Sections::const_iterator i = m_sections.find(name);
+  auto const i = m_sections.find(name);
   if (i != m_sections.end())
   {
     return i->second;
@@ -346,7 +346,7 @@ INISchema::get_section(const std::string& name) const
 void
 INISchema::save(std::ostream& out)
 {
-  for(Sections::iterator i = m_sections.begin(); i != m_sections.end(); ++i)
+  for (auto i = m_sections.begin(); i != m_sections.end(); ++i)
   {
     out << "[" << i->first << "]" << std::endl;
     i->second->save(out);

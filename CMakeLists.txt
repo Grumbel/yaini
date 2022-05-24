@@ -33,7 +33,7 @@ function(build_dependencies)
 endfunction()
 build_dependencies()
 
-file(GLOB YAINI_SOURCES src/ini/*.cpp)
+file(GLOB YAINI_SOURCES src/*.cpp)
 file(GLOB YAINI_HEADER_SOURCES include/yaini/*.hpp)
 add_library(yaini STATIC ${YAINI_SOURCES})
 set_target_properties(yaini PROPERTIES
@@ -42,9 +42,9 @@ set_target_properties(yaini PROPERTIES
   CXX_EXTENSIONS OFF)
 set_target_properties(yaini PROPERTIES PUBLIC_HEADER "${YAINI_HEADER_SOURCES}")
 target_compile_options(yaini PRIVATE ${WARNINGS_CXX_FLAGS})
-target_include_directories(yaini PRIVATE src/)
+target_include_directories(yaini PRIVATE include/yaini/)
 target_include_directories(yaini SYSTEM PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/yaini>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>
   $<INSTALL_INTERFACE:include>)
 
 # file(GLOB YAINI_UTIL_SOURCES extra/*.cpp)

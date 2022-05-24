@@ -2,8 +2,8 @@
 #include <iostream>
 #include <sstream>
 
-#include "ini/ini_parser.hpp"
-#include "ini/ini_builder.hpp"
+#include <yaini/ini_parser.hpp>
+#include <yaini/ini_builder.hpp>
 
 class INIParserTestBuilder : public INIBuilder
 {

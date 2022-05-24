@@ -2,10 +2,10 @@
 #include <iostream>
 #include <sstream>
 
-#include <yaini/ini_parser.hpp>
-#include <yaini/ini_builder.hpp>
+#include <yaini/parser.hpp>
+#include <yaini/builder.hpp>
 
-class INIParserTestBuilder : public yaini::INIBuilder
+class INIParserTestBuilder : public yaini::Builder
 {
 private:
   std::ostream& m_out;
@@ -58,7 +58,7 @@ TEST(INIParserTest, parse)
   std::istringstream in(input);
   std::ostringstream out;
   INIParserTestBuilder builder(out);
-  yaini::INIParser parser(in, builder, "<from-string>");
+  yaini::Parser parser(in, builder, "<from-string>");
   parser.run();
 
   ASSERT_EQ(expected, out.str());

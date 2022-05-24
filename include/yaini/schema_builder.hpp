@@ -14,30 +14,30 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_YAINI_INI_SCHEMA_BUILDER_HPP
-#define HEADER_YAINI_INI_SCHEMA_BUILDER_HPP
+#ifndef HEADER_YAINI_SCHEMA_BUILDER_HPP
+#define HEADER_YAINI_SCHEMA_BUILDER_HPP
 
-#include "ini_builder.hpp"
+#include "builder.hpp"
 
 namespace yaini {
 
-class INISchema;
+class Schema;
 
-class INISchemaBuilder : public INIBuilder
+class SchemaBuilder : public Builder
 {
 private:
-  const INISchema& m_schema;
+  const Schema& m_schema;
   std::string m_current_section;
 
 public:
-  INISchemaBuilder(const INISchema& schema);
+  SchemaBuilder(const Schema& schema);
 
   void send_section(const std::string& section) override;
   void send_pair(const std::string& name, const std::string& value) override;
 
 private:
-  INISchemaBuilder(const INISchemaBuilder&);
-  INISchemaBuilder& operator=(const INISchemaBuilder&);
+  SchemaBuilder(const SchemaBuilder&);
+  SchemaBuilder& operator=(const SchemaBuilder&);
 };
 
 } // namespace yaini

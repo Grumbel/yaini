@@ -14,30 +14,30 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "ini_schema_builder.hpp"
+#include "schema_builder.hpp"
 
 #include <stdexcept>
 
-#include "ini_schema.hpp"
+#include "schema.hpp"
 
 namespace yaini {
 
-INISchemaBuilder::INISchemaBuilder(const INISchema& schema) :
+SchemaBuilder::SchemaBuilder(const Schema& schema) :
   m_schema(schema),
   m_current_section()
 {
 }
 
 void
-INISchemaBuilder::send_section(const std::string& section)
+SchemaBuilder::send_section(const std::string& section)
 {
   m_current_section = section;
 }
 
 void
-INISchemaBuilder::send_pair(const std::string& name, const std::string& value)
+SchemaBuilder::send_pair(const std::string& name, const std::string& value)
 {
-  INISchemaSection* section = m_schema.get_section(m_current_section);
+  SchemaSection* section = m_schema.get_section(m_current_section);
   if (!section)
   {
     throw std::runtime_error("unknown section: '" + m_current_section + "'");
@@ -50,7 +50,7 @@ INISchemaBuilder::send_pair(const std::string& name, const std::string& value)
     }
     else
     {
-      INIPairSchema* pair = section->get(name);
+      PairSchema* pair = section->get(name);
       if (!pair)
       {
         throw std::runtime_error("unknown name: '" + name + "'");

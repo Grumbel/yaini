@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_YAINI_INI_SCHEMA_HPP
-#define HEADER_YAINI_INI_SCHEMA_HPP
+#ifndef HEADER_YAINI_SCHEMA_HPP
+#define HEADER_YAINI_SCHEMA_HPP
 
 #include <functional>
 #include <map>
@@ -24,70 +24,70 @@
 
 namespace yaini {
 
-class INIPairSchema
+class PairSchema
 {
 public:
-  INIPairSchema() {}
-  virtual ~INIPairSchema() {}
+  PairSchema() {}
+  virtual ~PairSchema() {}
   virtual std::string str() const =0;
   virtual void call(const std::string& value) =0;
 };
 
-class INISchemaSection
+class SchemaSection
 {
 private:
-  std::map<std::string, std::unique_ptr<INIPairSchema>> m_schema;
+  std::map<std::string, std::unique_ptr<PairSchema>> m_schema;
 
 public:
   std::function<void (const std::string&, const std::string&)> m_callback;
 
 public:
-  INISchemaSection(std::function<void (const std::string&, const std::string&)> callback);
-  ~INISchemaSection();
+  SchemaSection(std::function<void (const std::string&, const std::string&)> callback);
+  ~SchemaSection();
 
-  INISchemaSection& operator()(const std::string& name, bool*  value);
-  INISchemaSection& operator()(const std::string& name, int*   value);
-  INISchemaSection& operator()(const std::string& name, float* value);
-  INISchemaSection& operator()(const std::string& name, std::string* value);
-  INISchemaSection& operator()(const std::string& name, std::function<void (const std::string&)> callback);
-  INISchemaSection& operator()(const std::string& name,
+  SchemaSection& operator()(const std::string& name, bool*  value);
+  SchemaSection& operator()(const std::string& name, int*   value);
+  SchemaSection& operator()(const std::string& name, float* value);
+  SchemaSection& operator()(const std::string& name, std::string* value);
+  SchemaSection& operator()(const std::string& name, std::function<void (const std::string&)> callback);
+  SchemaSection& operator()(const std::string& name,
                                std::function<void ()> true_callback,
                                std::function<void ()> false_callback);
 
-  INIPairSchema* get(const std::string& name) const;
+  PairSchema* get(const std::string& name) const;
 
   void save(std::ostream& out);
 
 private:
-  INISchemaSection& add(const std::string& name, std::unique_ptr<INIPairSchema> schema);
+  SchemaSection& add(const std::string& name, std::unique_ptr<PairSchema> schema);
 
 private:
-  INISchemaSection(const INISchemaSection&);
-  INISchemaSection& operator=(const INISchemaSection&);
+  SchemaSection(const SchemaSection&);
+  SchemaSection& operator=(const SchemaSection&);
 };
 
-class INISchema
+class Schema
 {
 private:
-  std::map<std::string, std::unique_ptr<INISchemaSection>> m_sections;
+  std::map<std::string, std::unique_ptr<SchemaSection>> m_sections;
 
 public:
-  INISchema();
-  ~INISchema();
+  Schema();
+  ~Schema();
 
   void clear();
 
-  INISchemaSection& section(const std::string& name,
+  SchemaSection& section(const std::string& name,
                             std::function<void (const std::string&, const std::string&)> callback
                             = std::function<void (const std::string&, const std::string&)>());
 
-  INISchemaSection* get_section(const std::string& name) const;
+  SchemaSection* get_section(const std::string& name) const;
 
   void save(std::ostream& out);
 
 private:
-  INISchema(const INISchema&);
-  INISchema& operator=(const INISchema&);
+  Schema(const Schema&);
+  Schema& operator=(const Schema&);
 };
 
 } // namespace yaini

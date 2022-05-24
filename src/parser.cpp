@@ -14,15 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "ini_parser.hpp"
+#include "parser.hpp"
 
 #include <stdexcept>
 
-#include "ini_builder.hpp"
+#include "builder.hpp"
 
 namespace yaini {
 
-INIParser::INIParser(std::istream& in, INIBuilder& builder, const std::string& context) :
+Parser::Parser(std::istream& in, Builder& builder, const std::string& context) :
   m_in(in),
   m_builder(builder),
   m_context(context),
@@ -32,7 +32,7 @@ INIParser::INIParser(std::istream& in, INIBuilder& builder, const std::string& c
 {}
 
 void
-INIParser::run()
+Parser::run()
 {
   // read the first char
   next();
@@ -101,7 +101,7 @@ INIParser::run()
 }
 
 void
-INIParser::error(const std::string& message)
+Parser::error(const std::string& message)
 {
   std::ostringstream str;
   str << m_context << ":" << m_line << ":" << m_column << ": error: " << message;
@@ -109,13 +109,13 @@ INIParser::error(const std::string& message)
 }
 
 int
-INIParser::peek()
+Parser::peek()
 {
   return m_current_char;
 }
 
 void
-INIParser::next()
+Parser::next()
 {
   if (m_in.eof())
   {
@@ -133,7 +133,7 @@ INIParser::next()
 }
 
 bool
-INIParser::accept(char c)
+Parser::accept(char c)
 {
   if (peek() != c)
   {
@@ -147,7 +147,7 @@ INIParser::accept(char c)
 }
 
 void
-INIParser::expect(char c)
+Parser::expect(char c)
 {
   if (peek() != c)
   {
@@ -166,7 +166,7 @@ INIParser::expect(char c)
 }
 
 std::string
-INIParser::get_value_or_string()
+Parser::get_value_or_string()
 {
   if (accept('"'))
   {
@@ -181,7 +181,7 @@ INIParser::get_value_or_string()
 }
 
 std::string
-INIParser::get_ident_or_string()
+Parser::get_ident_or_string()
 {
   if (accept('"'))
   {
@@ -196,7 +196,7 @@ INIParser::get_ident_or_string()
 }
 
 std::string
-INIParser::get_value()
+Parser::get_value()
 {
   // an unquoted value is terminated either by a newline or a comment
   // character, whitespace at the end of the value will be trimmed
@@ -231,7 +231,7 @@ INIParser::get_value()
 }
 
 std::string
-INIParser::get_ident()
+Parser::get_ident()
 {
   // an unquoted value is terminated either by a newline or a comment
   // character, whitespace at the end of the value will be trimmed
@@ -267,7 +267,7 @@ INIParser::get_ident()
 }
 
 std::string
-INIParser::get_string()
+Parser::get_string()
 {
   // reads a string, handles escaping, does not eat begin and end quotes
   std::ostringstream str;
@@ -298,7 +298,7 @@ INIParser::get_string()
 }
 
 void
-INIParser::newline()
+Parser::newline()
 {
   if (peek() == -1)
   {
@@ -315,7 +315,7 @@ INIParser::newline()
 }
 
 void
-INIParser::eat_rest_of_line()
+Parser::eat_rest_of_line()
 {
   while(peek() != '\n' && peek() != -1)
   {
@@ -324,7 +324,7 @@ INIParser::eat_rest_of_line()
 }
 
 std::string
-INIParser::get_section()
+Parser::get_section()
 {
   std::ostringstream str;
   while(peek() != ']')
@@ -337,7 +337,7 @@ INIParser::get_section()
 
 
 void
-INIParser::whitespace()
+Parser::whitespace()
 {
   while(peek() == ' ' || peek() == '\t' || peek() == '\r')
   {
@@ -346,7 +346,7 @@ INIParser::whitespace()
 }
 
 int
-INIParser::getchar()
+Parser::getchar()
 {
   return m_in.get();
 }

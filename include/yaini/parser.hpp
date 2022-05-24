@@ -14,27 +14,27 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_YAINI_INI_PARSER_HPP
-#define HEADER_YAINI_INI_PARSER_HPP
+#ifndef HEADER_YAINI_PARSER_HPP
+#define HEADER_YAINI_PARSER_HPP
 
 #include <sstream>
 
 namespace yaini {
 
-class INIBuilder;
+class Builder;
 
-class INIParser
+class Parser
 {
 private:
   std::istream& m_in;
-  INIBuilder& m_builder;
+  Builder& m_builder;
   std::string m_context;
   int m_line;
   int m_column;
   int m_current_char;
 
 public:
-  INIParser(std::istream& in, INIBuilder& builder, const std::string& context);
+  Parser(std::istream& in, Builder& builder, const std::string& context);
 
   void run();
 
@@ -56,8 +56,8 @@ private:
   int  getchar();
 
 private:
-  INIParser(const INIParser&);
-  INIParser& operator=(const INIParser&);
+  Parser(const Parser&);
+  Parser& operator=(const Parser&);
 };
 
 } // namespace yaini

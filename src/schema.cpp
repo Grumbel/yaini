@@ -14,20 +14,20 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "ini_schema.hpp"
+#include "schema.hpp"
 
 #include <sstream>
 
 namespace yaini {
 
-class INIPairSchemaBoolCallback : public INIPairSchema
+class PairSchemaBoolCallback : public PairSchema
 {
 private:
   std::function<void ()> m_true_callback;
   std::function<void ()> m_false_callback;
 
 public:
-  INIPairSchemaBoolCallback(std::function<void ()> true_callback,
+  PairSchemaBoolCallback(std::function<void ()> true_callback,
                             std::function<void ()> false_callback) :
     m_true_callback(true_callback),
     m_false_callback(false_callback)
@@ -66,13 +66,13 @@ public:
   }
 };
 
-class INIPairSchemaBool : public INIPairSchema
+class PairSchemaBool : public PairSchema
 {
 private:
   bool* m_data;
 
 public:
-  INIPairSchemaBool(bool* data) : m_data(data) {}
+  PairSchemaBool(bool* data) : m_data(data) {}
   void call(const std::string& value) override
   {
     if (value == "yes" || value == "true" || value == "1")
@@ -102,17 +102,17 @@ public:
   }
 
 private:
-  INIPairSchemaBool(const INIPairSchemaBool&);
-  INIPairSchemaBool& operator=(const INIPairSchemaBool&);
+  PairSchemaBool(const PairSchemaBool&);
+  PairSchemaBool& operator=(const PairSchemaBool&);
 };
 
-class INIPairSchemaInt : public INIPairSchema
+class PairSchemaInt : public PairSchema
 {
 private:
   int* m_data;
 
 public:
-  INIPairSchemaInt(int* data) : m_data(data) {}
+  PairSchemaInt(int* data) : m_data(data) {}
   void call(const std::string& value) override
   {
     *m_data = atoi(value.c_str());
@@ -126,17 +126,17 @@ public:
   }
 
 private:
-  INIPairSchemaInt(const INIPairSchemaInt&);
-  INIPairSchemaInt& operator=(const INIPairSchemaInt&);
+  PairSchemaInt(const PairSchemaInt&);
+  PairSchemaInt& operator=(const PairSchemaInt&);
 };
 
-class INIPairSchemaFloat : public INIPairSchema
+class PairSchemaFloat : public PairSchema
 {
 private:
   float* m_data;
 
 public:
-  INIPairSchemaFloat(float* data) : m_data(data) {}
+  PairSchemaFloat(float* data) : m_data(data) {}
   void call(const std::string& value) override
   {
     *m_data = static_cast<float>(atof(value.c_str()));
@@ -150,17 +150,17 @@ public:
   }
 
 private:
-  INIPairSchemaFloat(const INIPairSchemaFloat&);
-  INIPairSchemaFloat& operator=(const INIPairSchemaFloat&);
+  PairSchemaFloat(const PairSchemaFloat&);
+  PairSchemaFloat& operator=(const PairSchemaFloat&);
 };
 
-class INIPairSchemaString : public INIPairSchema
+class PairSchemaString : public PairSchema
 {
 private:
   std::string* m_data;
 
 public:
-  INIPairSchemaString(std::string* data) : m_data(data) {}
+  PairSchemaString(std::string* data) : m_data(data) {}
   void call(const std::string& value) override
   {
     *m_data = value;
@@ -173,17 +173,17 @@ public:
   }
 
 private:
-  INIPairSchemaString(const INIPairSchemaString&);
-  INIPairSchemaString& operator=(const INIPairSchemaString&);
+  PairSchemaString(const PairSchemaString&);
+  PairSchemaString& operator=(const PairSchemaString&);
 };
 
-class INIPairSchemaCallback : public INIPairSchema
+class PairSchemaCallback : public PairSchema
 {
 private:
   std::function<void (const std::string&)> m_callback;
 
 public:
-  INIPairSchemaCallback(std::function<void (const std::string&)> callback) :
+  PairSchemaCallback(std::function<void (const std::string&)> callback) :
     m_callback(callback)
   {}
 
@@ -200,70 +200,70 @@ public:
   }
 };
 
-INISchemaSection::INISchemaSection(std::function<void (const std::string&, const std::string&)> callback) :
+SchemaSection::SchemaSection(std::function<void (const std::string&, const std::string&)> callback) :
   m_schema(),
   m_callback(callback)
 {
 }
 
-INISchemaSection::~INISchemaSection()
+SchemaSection::~SchemaSection()
 {
 }
 
-INISchemaSection&
-INISchemaSection::add(const std::string& name, std::unique_ptr<INIPairSchema> schema)
+SchemaSection&
+SchemaSection::add(const std::string& name, std::unique_ptr<PairSchema> schema)
 {
   m_schema[name] = std::move(schema);
 
   return *this;
 }
 
-INISchemaSection&
-INISchemaSection::operator()(const std::string& name, bool*  value)
+SchemaSection&
+SchemaSection::operator()(const std::string& name, bool*  value)
 {
-  add(name, std::make_unique<INIPairSchemaBool>(value));
+  add(name, std::make_unique<PairSchemaBool>(value));
   return *this;
 }
 
-INISchemaSection&
-INISchemaSection::operator()(const std::string& name, int*   value)
+SchemaSection&
+SchemaSection::operator()(const std::string& name, int*   value)
 {
-  add(name, std::make_unique<INIPairSchemaInt>(value));
+  add(name, std::make_unique<PairSchemaInt>(value));
   return *this;
 }
 
-INISchemaSection&
-INISchemaSection::operator()(const std::string& name, float* value)
+SchemaSection&
+SchemaSection::operator()(const std::string& name, float* value)
 {
-  add(name, std::make_unique<INIPairSchemaFloat>(value));
+  add(name, std::make_unique<PairSchemaFloat>(value));
   return *this;
 }
 
-INISchemaSection&
-INISchemaSection::operator()(const std::string& name, std::string* value)
+SchemaSection&
+SchemaSection::operator()(const std::string& name, std::string* value)
 {
-  add(name, std::make_unique<INIPairSchemaString>(value));
+  add(name, std::make_unique<PairSchemaString>(value));
   return *this;
 }
 
-INISchemaSection&
-INISchemaSection::operator()(const std::string& name,
+SchemaSection&
+SchemaSection::operator()(const std::string& name,
                              std::function<void ()> true_callback,
                              std::function<void ()> false_callback)
 {
-  add(name, std::make_unique<INIPairSchemaBoolCallback>(true_callback, false_callback));
+  add(name, std::make_unique<PairSchemaBoolCallback>(true_callback, false_callback));
   return *this;
 }
 
-INISchemaSection&
-INISchemaSection::operator()(const std::string& name, std::function<void (const std::string&)> callback)
+SchemaSection&
+SchemaSection::operator()(const std::string& name, std::function<void (const std::string&)> callback)
 {
-  add(name, std::make_unique<INIPairSchemaCallback>(callback));
+  add(name, std::make_unique<PairSchemaCallback>(callback));
   return *this;
 }
 
-INIPairSchema*
-INISchemaSection::get(const std::string& name) const
+PairSchema*
+SchemaSection::get(const std::string& name) const
 {
   auto i = m_schema.find(name);
   if (i == m_schema.end())
@@ -277,7 +277,7 @@ INISchemaSection::get(const std::string& name) const
 }
 
 void
-INISchemaSection::save(std::ostream& out)
+SchemaSection::save(std::ostream& out)
 {
   for (auto i = m_schema.begin(); i != m_schema.end(); ++i)
   {
@@ -285,35 +285,35 @@ INISchemaSection::save(std::ostream& out)
   }
 }
 
-INISchema::INISchema() :
+Schema::Schema() :
   m_sections()
 {
 }
 
-INISchema::~INISchema()
+Schema::~Schema()
 {
   clear();
 }
 
 void
-INISchema::clear()
+Schema::clear()
 {
   m_sections.clear();
 }
 
-INISchemaSection&
-INISchema::section(const std::string& name,
+SchemaSection&
+Schema::section(const std::string& name,
                    std::function<void (const std::string&, const std::string&)> callback)
 {
-  auto sec = std::make_unique<INISchemaSection>(callback);
+  auto sec = std::make_unique<SchemaSection>(callback);
   auto* const sec_tmp = sec.get();
   m_sections[name] = std::move(sec);
 
   return *sec_tmp;
 }
 
-INISchemaSection*
-INISchema::get_section(const std::string& name) const
+SchemaSection*
+Schema::get_section(const std::string& name) const
 {
   auto const i = m_sections.find(name);
   if (i != m_sections.end())
@@ -327,7 +327,7 @@ INISchema::get_section(const std::string& name) const
 }
 
 void
-INISchema::save(std::ostream& out)
+Schema::save(std::ostream& out)
 {
   for (auto i = m_sections.begin(); i != m_sections.end(); ++i)
   {

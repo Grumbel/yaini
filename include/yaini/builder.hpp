@@ -14,17 +14,18 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef HEADER_YAINI_INI_BUILDER_HPP
-#define HEADER_YAINI_INI_BUILDER_HPP
+#ifndef HEADER_YAINI_BUILDER_HPP
+#define HEADER_YAINI_BUILDER_HPP
 
 #include <string>
 
 namespace yaini {
 
-class INIBuilder
+class Builder
 {
 public:
-  virtual ~INIBuilder() {}
+  virtual ~Builder() {}
+
   virtual void send_section(const std::string& section) =0;
   virtual void send_pair(const std::string& name, const std::string& value) =0;
 };

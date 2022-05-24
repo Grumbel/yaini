@@ -19,6 +19,7 @@
 
 #include <functional>
 #include <map>
+#include <memory>
 #include <string>
 
 class INIPairSchema
@@ -33,8 +34,7 @@ public:
 class INISchemaSection
 {
 private:
-  typedef std::map<std::string, INIPairSchema*> Schema;
-  Schema m_schema;
+  std::map<std::string, std::unique_ptr<INIPairSchema>> m_schema;
 
 public:
   std::function<void (const std::string&, const std::string&)> m_callback;
@@ -57,7 +57,7 @@ public:
   void save(std::ostream& out);
 
 private:
-  INISchemaSection& add(const std::string& name, INIPairSchema* schema);
+  INISchemaSection& add(const std::string& name, std::unique_ptr<INIPairSchema> schema);
 
 private:
   INISchemaSection(const INISchemaSection&);
@@ -67,7 +67,7 @@ private:
 class INISchema
 {
 private:
-  std::map<std::string, INISchemaSection*> m_sections;
+  std::map<std::string, std::unique_ptr<INISchemaSection>> m_sections;
 
 public:
   INISchema();

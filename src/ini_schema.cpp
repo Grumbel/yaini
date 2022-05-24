@@ -206,23 +206,12 @@ INISchemaSection::INISchemaSection(std::function<void (const std::string&, const
 
 INISchemaSection::~INISchemaSection()
 {
-  for (auto i = m_schema.begin(); i != m_schema.end(); ++i)
-  {
-    delete i->second;
-  }
 }
 
 INISchemaSection&
-INISchemaSection::add(const std::string& name, INIPairSchema* schema)
+INISchemaSection::add(const std::string& name, std::unique_ptr<INIPairSchema> schema)
 {
-  auto i = m_schema.find(name);
-
-  if (i != m_schema.end())
-  {
-    delete i->second;
-  }
-
-  m_schema.insert(std::pair<std::string, INIPairSchema*>(name, schema));
+  m_schema[name] = std::move(schema);
 
   return *this;
 }
@@ -230,28 +219,28 @@ INISchemaSection::add(const std::string& name, INIPairSchema* schema)
 INISchemaSection&
 INISchemaSection::operator()(const std::string& name, bool*  value)
 {
-  add(name, new INIPairSchemaBool(value));
+  add(name, std::make_unique<INIPairSchemaBool>(value));
   return *this;
 }
 
 INISchemaSection&
 INISchemaSection::operator()(const std::string& name, int*   value)
 {
-  add(name, new INIPairSchemaInt(value));
+  add(name, std::make_unique<INIPairSchemaInt>(value));
   return *this;
 }
 
 INISchemaSection&
 INISchemaSection::operator()(const std::string& name, float* value)
 {
-  add(name, new INIPairSchemaFloat(value));
+  add(name, std::make_unique<INIPairSchemaFloat>(value));
   return *this;
 }
 
 INISchemaSection&
 INISchemaSection::operator()(const std::string& name, std::string* value)
 {
-  add(name, new INIPairSchemaString(value));
+  add(name, std::make_unique<INIPairSchemaString>(value));
   return *this;
 }
 
@@ -260,14 +249,14 @@ INISchemaSection::operator()(const std::string& name,
                              std::function<void ()> true_callback,
                              std::function<void ()> false_callback)
 {
-  add(name, new INIPairSchemaBoolCallback(true_callback, false_callback));
+  add(name, std::make_unique<INIPairSchemaBoolCallback>(true_callback, false_callback));
   return *this;
 }
 
 INISchemaSection&
 INISchemaSection::operator()(const std::string& name, std::function<void (const std::string&)> callback)
 {
-  add(name, new INIPairSchemaCallback(callback));
+  add(name, std::make_unique<INIPairSchemaCallback>(callback));
   return *this;
 }
 
@@ -281,7 +270,7 @@ INISchemaSection::get(const std::string& name) const
   }
   else
   {
-    return i->second;
+    return i->second.get();
   }
 }
 
@@ -307,10 +296,6 @@ INISchema::~INISchema()
 void
 INISchema::clear()
 {
-  for (auto i = m_sections.begin(); i != m_sections.end(); ++i)
-  {
-    delete i->second;
-  }
   m_sections.clear();
 }
 
@@ -318,15 +303,11 @@ INISchemaSection&
 INISchema::section(const std::string& name,
                    std::function<void (const std::string&, const std::string&)> callback)
 {
-  auto const i = m_sections.find(name);
-  if (i != m_sections.end())
-  {
-    delete i->second;
-  }
+  auto sec = std::make_unique<INISchemaSection>(callback);
+  auto* const sec_tmp = sec.get();
+  m_sections[name] = std::move(sec);
 
-  INISchemaSection* sec = new INISchemaSection(callback);
-  m_sections.insert(std::pair<std::string, INISchemaSection*>(name, sec));
-  return *sec;
+  return *sec_tmp;
 }
 
 INISchemaSection*
@@ -335,7 +316,7 @@ INISchema::get_section(const std::string& name) const
   auto const i = m_sections.find(name);
   if (i != m_sections.end())
   {
-    return i->second;
+    return i->second.get();
   }
   else
   {

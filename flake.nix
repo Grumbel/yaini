@@ -23,8 +23,10 @@
         in
           project_version;
 
-      in rec {
-        packages = flake-utils.lib.flattenTree {
+      in {
+        packages = rec {
+          default = yaini;
+
           yaini = pkgs.stdenv.mkDerivation {
             pname = "yaini";
             version = project_version_from_file;
@@ -38,12 +40,12 @@
               pkgs.cmake
             ];
             buildInputs = [
-              tinycmmc.defaultPackage.${system}
+              tinycmmc.packages.${system}.default
 
               pkgs.gtest
             ];
            };
         };
-        defaultPackage = packages.yaini;
-      });
+      }
+    );
 }

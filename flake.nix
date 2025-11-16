@@ -2,7 +2,7 @@
   description = "Yet another INI parser for C++";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
 
     tinycmmc.url = "github:grumbel/tinycmmc";
@@ -30,19 +30,27 @@
           yaini = pkgs.stdenv.mkDerivation {
             pname = "yaini";
             version = project_version_from_file;
+
             src = ./.;
+
             postPatch = ''
               echo "v${project_version_from_file}" > VERSION
             '';
-            cmakeFlags = [ "-DBUILD_TESTS=ON" ];
-            doCheck = true;
-            nativeBuildInputs = [
-              pkgs.cmake
-            ];
-            buildInputs = [
-              tinycmmc.packages.${system}.default
 
-              pkgs.gtest
+            cmakeFlags = [
+              "-DBUILD_TESTS=ON"
+            ];
+
+            doCheck = true;
+
+            nativeBuildInputs = with pkgs; [
+              cmake
+            ];
+
+            buildInputs = with pkgs; [
+              gtest
+            ] ++ [
+              tinycmmc.packages.${system}.default
             ];
            };
         };
